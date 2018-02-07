@@ -1,0 +1,25 @@
+{
+  "name": "apiplanetsstarwars",
+  "version": "1.0.0",
+  "description": "b2w test",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/lucasrmonteiro/APIPlanetsStarWars.git"
+  },
+  "author": "lucas monteiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/lucasrmonteiro/APIPlanetsStarWars/issues"
+  },
+  "homepage": "https://gitlab.com/lucasrmonteiro/APIPlanetsStarWars#README",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.3",
+    "morgan": "^1.9.0"
+  }
+}
