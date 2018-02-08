@@ -6,7 +6,7 @@ let PlanetaSchema = new Schema({
     Nome: { type: String, required: true },
     Clima: { type: String, required: true },
     Terreno: { type: String, required: true },
-    QtdEmFilmes: { type: Int, required: true }
+    QtdEmFilmes: { type: Number, required: true }
 });
 
 let starWarsAPI ={
@@ -14,8 +14,6 @@ let starWarsAPI ={
     port: 80,
     method: "GET"
 };
-
-module.exports = mongoose.model('planeta', PlanetaSchema);
 
 
 function validaModel(model){
@@ -33,3 +31,6 @@ function validaModel(model){
     }
 
 }
+
+
+module.exports = mongoose.model('planeta', PlanetaSchema);
