@@ -1,6 +1,6 @@
 let mongoose = require('mongoose');
-let Planeta = require('../model/planeta');
-
+let Planeta = require('../Model/planeta');
+let JsonData = require('../Model/Data');
 
 function getPlanetas(req ,res){
 
@@ -55,4 +55,35 @@ function getPlanetaByName(req ,res){
             res.json(planeta);
         }
     })
+}
+
+
+
+function cargaInicial(){
+
+    try {
+
+        let doc = planeta.find({} ,'first');
+
+        if(doc == ""){
+            http.request(options ,function(res){
+                let result = res.result;
+        
+                for(let planetJson in result){
+                    let planeta = new Planeta();
+                    planeta.Nome = planetJson.name;
+                    planeta.Clima = planetJson.climate;
+                    planeta.Terreno = planetJson.terrain;
+                    planeta.QtdEmFilmes = planetJson.films.length;
+                    if(planeta.validaModel(planeta)){
+                        planeta.save();
+                    }
+                }
+            });   
+        }else{
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }

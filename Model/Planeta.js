@@ -9,4 +9,27 @@ let PlanetaSchema = new Schema({
     QtdEmFilmes: { type: Int, required: true }
 });
 
+let starWarsAPI ={
+    host: "https://swapi.co/api/planets/",
+    port: 80,
+    method: "GET"
+};
+
 module.exports = mongoose.model('planeta', PlanetaSchema);
+
+
+function validaModel(model){
+
+    var retorno = true;
+
+    if(model.Nome == "" || model.Nome == null || model.Nome == "null"){
+        retorno = false;
+    }else if(model.Clima == "" || model.Clima == null || model.Clima == "null"){
+        retorno = false;
+    }else if(model.Terreno == "" || model.Terreno == null || model.Terreno == "null"){
+        retorno = false;
+    }else if(!(parseInt(model.QtdEmFilmes) > 0)){
+        retorno = false;
+    }
+
+}
