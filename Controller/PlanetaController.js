@@ -2,29 +2,55 @@ let mongoose = require('mongoose');
 let Planeta = require('../Model/planeta');
 let JsonData = require('../Model/Data');
 
+let starWarsAPI ={
+    host: "swapi.co",
+    port: 443,
+    path:"/api/planets/",
+    method: "GET"
+};
+
 module.exports = {
 
     getPlanetas : function(req ,res){
 
+        let jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+
         let query = Planeta.find({});
-    
-        query.execute((err ,planetas) => {
+
+        query.exec(function(err,planetas){
+          
             if(err){
-                res.send(err);
+                jsonRes = JsonData.getJsonError(err);
             }else{
-                res.json(planetas);
+                jsonRes = JsonData.getJsonSucesso(planetas);
             }
-        })
+
+            return jsonRes;
+        });
+
+        // Planeta.find((err,planeta) => {
+            
+        //     if(err){
+        //         jsonRes = JsonData.getJsonError(res.send(err));
+        //     }else{
+        //         jsonRes = JsonData.getJsonSucesso(res.json(planeta));
+        //     }
+        // });
     },
 
     getPlaneta : function(req ,res){
+        
+        let jsonRes = "";
+
         query.findById(req.params.id ,(err ,planetas) => {
             if(err){
-                JsonData.getJsonError(res.send(err));
+                jsonRes =  JsonData.getJsonError(res.send(err));
             }else{
-                JsonData.getJsonSucesso(res.json(planetas));
+                jsonRes = JsonData.getJsonSucesso(res.json(planetas));
             }
-        })
+        });
+
+        return jsonRes;
     },
     salvarPlaneta: function(req ,res){
 
@@ -53,27 +79,44 @@ module.exports = {
             }
         })
     },
+
+
     cargaInicial: function(){
 
         try {
     
-            let doc = planeta.find({} ,'first');
-    
-            if(doc == ""){
-                http.request(options ,function(res){
-                    let result = res.result;
-            
-                    for(let planetJson in result){
-                        let planeta = new Planeta();
-                        planeta.Nome = planetJson.name;
-                        planeta.Clima = planetJson.climate;
-                        planeta.Terreno = planetJson.terrain;
-                        planeta.QtdEmFilmes = planetJson.films.length;
-                        if(planeta.validaModel(planeta)){
-                            planeta.save();
+            let query = Planeta.findOne('planeta');
+            let jsonRes = "";
+            let count = query.count;
+            if(query.count.length == 2){
+                let http = require('https');
+                http.request(starWarsAPI ,function(res){
+                    
+                    let responseString = '';
+
+                    res.on('data' ,function(result){
+                        responseString += result;
+                    });
+
+                    res.on('end', function() {
+                        
+                        var responseObject = JSON.parse(responseString);
+                        for(let i = 0; i < responseObject.results.length; i++){
+                            let planetJson = responseObject.results[i];
+                            let planeta = new Planeta();
+                            planeta.Nome = planetJson.name;
+                            planeta.Clima = planetJson.climate;
+                            planeta.Terreno = planetJson.terrain;
+                            planeta.QtdEmFilmes = planetJson.films.length;
+                            //if(Planeta.validaModel(planeta)){
+                                planeta.save();
+                            //}
                         }
-                    }
-                });   
+                      });
+
+                      jsonRes = JsonData.getJsonSucesso("Carga inicial concluida com sucesso.");
+            
+                }).end();   
             }else{
     
             }

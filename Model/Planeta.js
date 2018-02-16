@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+mongoose.set('debug', true);
 
 let Schema = mongoose.Schema;
 
@@ -9,14 +10,7 @@ let PlanetaSchema = new Schema({
     QtdEmFilmes: { type: Number, required: true }
 });
 
-let starWarsAPI ={
-    host: "https://swapi.co/api/planets/",
-    port: 80,
-    method: "GET"
-};
-
-
-function validaModel(model){
+PlanetaSchema.methods.validaModel = function validaModel(model){
 
     var retorno = true;
 
@@ -30,7 +24,9 @@ function validaModel(model){
         retorno = false;
     }
 
-}
+    return retorno;
+};
+
 
 
 module.exports = mongoose.model('planeta', PlanetaSchema);

@@ -1,5 +1,5 @@
-var express = require('express');
-var Planeta = require('../Controller/PlanetaController');
+let express = require('express');
+let Planeta = require('../Controller/PlanetaController');
 
 module.exports =  (function(){
 
@@ -7,15 +7,33 @@ module.exports =  (function(){
 
     // //Middleware 
     // router.use(function(req, res, next) {
-    //     if(req.body.status == "200"){
+    //     if(res.body.status == "200"){
     //         next(); 
     //     }else{
-    //         Console.log("Error :" + req.body.toString())
+    //         Console.log("Error :" + res.body.toString())
     //         next();
     //     }
     // });
-    router.route('/planetas').get(function(req ,res){
-        Planeta.getPlanetas(req ,res);
-    });
-    
-});
+
+    router.route('/planetas')
+        .get(function(req,res){
+            let json = Planeta.getPlanetas(req ,res);
+            res.json(json);
+        });
+
+
+    router.route('/planeta:id')
+        .get(function(req,res){
+            let json = Planeta.getPlaneta(req ,res);
+
+            res.json(json);
+        });        
+        
+    router.route('/cargainicial')
+        .get(function(req,res){
+            let json = Planeta.cargaInicial();
+            res.json(json);
+        });          
+
+    return router;
+})();
