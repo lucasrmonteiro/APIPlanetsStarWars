@@ -11,59 +11,82 @@ let starWarsAPI ={
 
 module.exports = {
 
+    paramsRequest : {},
+
+    paramsRequestClean : function(paramsRequest){
+        let objEmpty = {};
+        paramsRequest = objEmpty;
+        return paramsRequest;
+    },
+
     getPlanetas : function(req ,res){
 
         let jsonRes = "";
+        let _paramsRequest = this.paramsRequestClean(this.paramsRequest);
 
-        let idQuery = req.params.id == undefined ? {} : {"_id" : req.params.id};
+        if(req.params.id != undefined){
+            _paramsRequest._id = req.params.id;
+        }
 
-        Planeta.find(idQuery ,(err,res) => {
-                if(err){
-                    jsonRes = JsonData.getJsonError(err);
-                    res.json(jsonRes);
-                }
-            })
-            .then((planets) => {
-                if(planets){
-                    jsonRes = JsonData.getJsonSucesso(planets);
-                }else{
-                    jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
-                }
+        if(req.params.nome != undefined){
+            _paramsRequest.Nome = req.params.nome;
+        }
+
+        Planeta.find(_paramsRequest ,(err,res) => {
+            if(err){
+                jsonRes = JsonData.getJsonError(err);
                 res.json(jsonRes);
-            });
-        
+            }
+        })
+        .then((planets) => {
+            if(planets){
+                jsonRes = JsonData.getJsonSucesso(planets);
+            }else{
+                jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+            };
+            res.json(jsonRes);
+        });
     },
 
-    // getPlanetas : function(req ,res){
+    getPlanetaByName: function(req ,res){
+        
+        let jsonRes = "";
+        let _paramsRequest = this.paramsRequestClean(this.paramsRequest);
 
-    //     let jsonRes = "";
+        if(req.params.nome != undefined){
+            _paramsRequest.Nome = req.params.nome;
+        }
+      
+        Planeta.findOne(_paramsRequest ,(err,res) => {
+            if(err){
+                jsonRes = JsonData.getJsonError(err);
+                res.json(jsonRes);
+            }
+        })
+        .then((planets) => {
+            if(planets){
+                jsonRes = JsonData.getJsonSucesso(planets);
+            }else{
+                jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+            };
+            res.json(jsonRes);
+        });
 
-    //     Planeta.findById(req.params.id  ,(err,res) => {
-    //             if(err){
-    //                 jsonRes = JsonData.getJsonError(err);
-    //                 res.json(jsonRes);
-    //             }
-    //         })
-    //         .then((planets) => {
-    //             if(planets){
-    //                 jsonRes = JsonData.getJsonSucesso(planets);
-    //             }else{
-    //                 jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
-    //             }
-    //             res.json(jsonRes);
-    //         });
-    // },
+    },
 
     salvarPlaneta: function(req ,res){
 
-        var novoPlaneta = new Planeta(req.body);
+        let jsonRes = "";
+        let novoPlaneta = new Planeta(req.body);
     
         novoPlaneta.save((err,planeta) => {
             if(err) {
-                res.send(err);
+                jsonRes = JsonData.getJsonError(err);
+                res.json(jsonRes);
             }
             else { 
-                res.json({message: "Planeta successfully added!", planeta });
+                jsonRes = JsonData.getJsonSucesso(planets);
+                res.json(jsonRes);
             }
         });
     },
@@ -72,16 +95,20 @@ module.exports = {
             res.json({ Planeta: "Book successfully deleted!", result });
         });
     },
-    getPlanetaByName: function(req ,res){
-        Planetas.find({"Nome": req.body.Nome})((err ,planeta) => {
-            if(err){
-                res.send(err);
-            }else{
-                res.json(planeta);
-            }
-        })
-    },
 
+    validaModel:function(model){
+        var retorno = true;
+
+        if(model.Nome == "" || model.Nome == null || model.Nome == "null"){
+            retorno = false;
+        }else if(model.Clima == "" || model.Clima == null || model.Clima == "null"){
+            retorno = false;
+        }else if(model.Terreno == "" || model.Terreno == null || model.Terreno == "null"){
+            retorno = false;
+        }
+
+        return retorno;
+    },
 
     cargaInicial: function(){
 

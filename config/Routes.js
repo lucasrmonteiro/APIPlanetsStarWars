@@ -19,6 +19,18 @@ module.exports =  (function(){
         PlanetaController.getPlanetas(req,res);
     });
  
+    router.route('/planetanome/:nome').get((req,res) =>{
+        PlanetaController.getPlanetaByName(req,res);
+    });
+ 
+    router.route('/novoplaneta').post((req,res) =>{
+        if(PlanetaController.validaModel(req.body)){
+            PlanetaController.salvarPlaneta(req,res);
+        }else{
+            res.json("Dados Enviados Inválidos");
+        }
+    });
+ 
         
 
     return router;
