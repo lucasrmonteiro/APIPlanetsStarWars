@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-let Planeta = require('../Model/planeta');
+let Planeta = require('../Model/Planeta');
 let JsonData = require('../Model/Data');
 
 let starWarsAPI ={
@@ -13,29 +13,23 @@ module.exports = {
 
     getPlanetas : function(req ,res){
 
-        let jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+        let jsonRes = "";
 
-        let query = Planeta.find({});
-
-        query.exec(function(err,planetas){
-          
-            if(err){
-                jsonRes = JsonData.getJsonError(err);
-            }else{
-                jsonRes = JsonData.getJsonSucesso(planetas);
-            }
-
-            return jsonRes;
-        });
-
-        // Planeta.find((err,planeta) => {
-            
-        //     if(err){
-        //         jsonRes = JsonData.getJsonError(res.send(err));
-        //     }else{
-        //         jsonRes = JsonData.getJsonSucesso(res.json(planeta));
-        //     }
-        // });
+        Planeta.find({} ,(err,res) => {
+                if(err){
+                    jsonRes = JsonData.getJsonError(err);
+                    res.json(jsonRes);
+                }
+            })
+            .then((planets) => {
+                if(planets){
+                    jsonRes = JsonData.getJsonSucesso(planets);
+                }else{
+                    jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+                }
+                res.json(jsonRes);
+            });
+        
     },
 
     getPlaneta : function(req ,res){
