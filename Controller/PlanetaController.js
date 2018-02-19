@@ -15,7 +15,9 @@ module.exports = {
 
         let jsonRes = "";
 
-        Planeta.find({} ,(err,res) => {
+        let idQuery = req.params.id == undefined ? {} : {"_id" : req.params.id};
+
+        Planeta.find(idQuery ,(err,res) => {
                 if(err){
                     jsonRes = JsonData.getJsonError(err);
                     res.json(jsonRes);
@@ -32,20 +34,26 @@ module.exports = {
         
     },
 
-    getPlaneta : function(req ,res){
-        
-        let jsonRes = "";
+    // getPlanetas : function(req ,res){
 
-        query.findById(req.params.id ,(err ,planetas) => {
-            if(err){
-                jsonRes =  JsonData.getJsonError(res.send(err));
-            }else{
-                jsonRes = JsonData.getJsonSucesso(res.json(planetas));
-            }
-        });
+    //     let jsonRes = "";
 
-        return jsonRes;
-    },
+    //     Planeta.findById(req.params.id  ,(err,res) => {
+    //             if(err){
+    //                 jsonRes = JsonData.getJsonError(err);
+    //                 res.json(jsonRes);
+    //             }
+    //         })
+    //         .then((planets) => {
+    //             if(planets){
+    //                 jsonRes = JsonData.getJsonSucesso(planets);
+    //             }else{
+    //                 jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+    //             }
+    //             res.json(jsonRes);
+    //         });
+    // },
+
     salvarPlaneta: function(req ,res){
 
         var novoPlaneta = new Planeta(req.body);

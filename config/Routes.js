@@ -14,6 +14,11 @@ module.exports =  (function(){
     router.route('/planetas').get((req,res) =>{
         PlanetaController.getPlanetas(req,res);
     });
+
+    router.route('/planetas/:id').get((req,res) =>{
+        PlanetaController.getPlanetas(req,res);
+    });
+ 
         
 
     return router;

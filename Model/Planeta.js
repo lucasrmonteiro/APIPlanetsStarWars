@@ -10,22 +10,22 @@ let PlanetaSchema = new Schema({
     QtdEmFilmes: { type: Number, required: true }
 });
 
-PlanetaSchema.methods.validaModel = function validaModel(model){
+// PlanetaSchema.methods.validaModel = function validaModel(model){
 
-    var retorno = true;
+//     var retorno = true;
 
-    if(model.Nome == "" || model.Nome == null || model.Nome == "null"){
-        retorno = false;
-    }else if(model.Clima == "" || model.Clima == null || model.Clima == "null"){
-        retorno = false;
-    }else if(model.Terreno == "" || model.Terreno == null || model.Terreno == "null"){
-        retorno = false;
-    }else if(!(parseInt(model.QtdEmFilmes) > 0)){
-        retorno = false;
-    }
+//     if(model.Nome == "" || model.Nome == null || model.Nome == "null"){
+//         retorno = false;
+//     }else if(model.Clima == "" || model.Clima == null || model.Clima == "null"){
+//         retorno = false;
+//     }else if(model.Terreno == "" || model.Terreno == null || model.Terreno == "null"){
+//         retorno = false;
+//     }else if(!(parseInt(model.QtdEmFilmes) > 0)){
+//         retorno = false;
+//     }
 
-    return retorno;
-};
+//     return retorno;
+// };
 
 
 
