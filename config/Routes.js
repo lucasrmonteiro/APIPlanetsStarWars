@@ -27,7 +27,7 @@ module.exports =  (function(){
         if(PlanetaController.validaModel(req.body)){
             PlanetaController.salvarPlaneta(req,res);
         }else{
-            res.json("Dados Enviados Inválidos");
+            res.json(PlanetaController.retonarMsgJsonErrado("Dados Enviados Inválidos"));
         }
     });
  

@@ -32,20 +32,19 @@ module.exports = {
             _paramsRequest.Nome = req.params.nome;
         }
 
-        Planeta.find(_paramsRequest ,(err,res) => {
-            if(err){
+        Planeta.find(_paramsRequest)
+            .then((planets) => {
+                if(planets){
+                    jsonRes = JsonData.getJsonSucesso(planets);
+                }else{
+                    jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+                };
+                res.json(jsonRes);
+            })
+            .catch((err) =>{
                 jsonRes = JsonData.getJsonError(err);
                 res.json(jsonRes);
-            }
-        })
-        .then((planets) => {
-            if(planets){
-                jsonRes = JsonData.getJsonSucesso(planets);
-            }else{
-                jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
-            };
-            res.json(jsonRes);
-        });
+            });
     },
 
     getPlanetaByName: function(req ,res){
@@ -57,20 +56,19 @@ module.exports = {
             _paramsRequest.Nome = req.params.nome;
         }
       
-        Planeta.findOne(_paramsRequest ,(err,res) => {
-            if(err){
+        Planeta.findOne(_paramsRequest)
+            .then((planets) => {
+                if(planets){
+                    jsonRes = JsonData.getJsonSucesso(planets);
+                }else{
+                    jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
+                };
+                res.json(jsonRes);
+            })
+            .catch((err) =>{
                 jsonRes = JsonData.getJsonError(err);
                 res.json(jsonRes);
-            }
-        })
-        .then((planets) => {
-            if(planets){
-                jsonRes = JsonData.getJsonSucesso(planets);
-            }else{
-                jsonRes = JsonData.getJsonSucesso("Não Existem Dados no DB");
-            };
-            res.json(jsonRes);
-        });
+            });
 
     },
 
@@ -79,20 +77,34 @@ module.exports = {
         let jsonRes = "";
         let novoPlaneta = new Planeta(req.body);
     
-        novoPlaneta.save((err,planeta) => {
-            if(err) {
+        novoPlaneta.save((err) => {
+            if(err){
                 jsonRes = JsonData.getJsonError(err);
                 res.json(jsonRes);
-            }
-            else { 
-                jsonRes = JsonData.getJsonSucesso(planets);
+            }else{
+                jsonRes = JsonData.getJsonSucessoInsert(novoPlaneta);
                 res.json(jsonRes);
             }
         });
     },
+    
     deletePlaneta: function(req, res) {
-        Planeta.remove({_id : req.params.id}, (err, result) => {
-            res.json({ Planeta: "Book successfully deleted!", result });
+
+        let jsonRes = "";
+        let _paramsRequest = this.paramsRequestClean(this.paramsRequest);
+
+        if(req.params.nome != undefined){
+            _paramsRequest.id = req.params.id;
+        }
+
+        Planeta.remove(_paramsRequest, (err) => {
+            if(err){
+                jsonRes = JsonData.getJsonError(err);
+                res.json(jsonRes);
+            }else{
+                jsonRes = JsonData.getJsonSucessoDelete(novoPlaneta);
+                res.json(jsonRes);
+            }
         });
     },
 
@@ -108,6 +120,10 @@ module.exports = {
         }
 
         return retorno;
+    },
+
+    retonarMsgJsonErrado : function(message){
+        return JsonData.getJsonError(message);
     },
 
     cargaInicial: function(){
@@ -137,9 +153,9 @@ module.exports = {
                             planeta.Clima = planetJson.climate;
                             planeta.Terreno = planetJson.terrain;
                             planeta.QtdEmFilmes = planetJson.films.length;
-                            //if(Planeta.validaModel(planeta)){
+                            if(this.validaModel(planeta)){
                                 planeta.save();
-                            //}
+                            }
                         }
                       });
 
