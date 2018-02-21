@@ -22,7 +22,7 @@ app.use(bodyParser.json({ type: 'application/json'}));
 
 var router = require('./config/Routes');
 
-app.use('/api', router);
+app.use('/Planeta', router);
 
 app.listen(port);
 console.log("Listening on port " + port);

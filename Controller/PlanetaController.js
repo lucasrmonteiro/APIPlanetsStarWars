@@ -93,19 +93,24 @@ module.exports = {
         let jsonRes = "";
         let _paramsRequest = this.paramsRequestClean(this.paramsRequest);
 
-        if(req.params.nome != undefined){
-            _paramsRequest.id = req.params.id;
+        if(req.body.id != undefined){
+            _paramsRequest._id = req.body.id;
+
+            Planeta.remove(_paramsRequest, (err) => {
+                if(err){
+                    jsonRes = JsonData.getJsonError(err);
+                    res.json(jsonRes);
+                }else{
+                    jsonRes = JsonData.getJsonSucessoDelete();
+                    res.json(jsonRes);
+                }
+            });
+        }else{
+            jsonRes = JsonData.getJsonError("Id do planeta não informado");
+            res.json(jsonRes);
         }
 
-        Planeta.remove(_paramsRequest, (err) => {
-            if(err){
-                jsonRes = JsonData.getJsonError(err);
-                res.json(jsonRes);
-            }else{
-                jsonRes = JsonData.getJsonSucessoDelete(novoPlaneta);
-                res.json(jsonRes);
-            }
-        });
+
     },
 
     validaModel:function(model){
